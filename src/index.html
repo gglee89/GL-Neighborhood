@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GL My Neighborhood</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Roboto;
+        overflow: hidden;
+      }
+
+      #hamburger-top-menu {
+        width: 50px;
+        font-size: 20pt;
+        color: #252525;
+        margin-top: 9px;
+        margin-left: 17px;
+        height: 29px;
+        outline: none;
+        float: left;
+      }
+
+      #hamburger-top-menu:hover {
+        cursor: pointer;
+      }
+
+      #site-logo {
+        width: 220px;
+        float: left;
+        height: 29px;
+        margin-top: 8px;
+        font-size: 20pt;
+        font-weight: bold;
+        outline: none;
+        color: #252525;
+      }
+
+      #search-bar {
+        position: absolute;
+        height: 47px;
+        width: 100%;
+        border: 1px solid #555;
+        color: #FF1442;
+        top: 0;
+      }
+
+      .controls {
+        background-color: #fff;
+        border-radius: 2px;
+        border: 1px solid #9ca0a7;
+        box-sizing: border-box;
+        font-size: 15px;
+        font-weight: 300;
+        height: 29px;
+        margin-left: 17px;
+        margin-top: 10px;
+        outline: none;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      .controls:focus {
+        border-color: #4d90fe;
+      }
+
+      #container {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        border: 1px solid #9ca0a7;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        padding-top: 48px;
+      }
+
+      #menu {
+        float: left;
+        width: 450px;
+        min-height: 100%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        border-right: 1px solid #9ca0a7;
+        height: 100%;
+        font-size: 15px;
+        font-weight: 300;
+        outline: none;
+        text-overflow: ellipsis;
+      }
+
+      .menu-search-list {
+        float: left;
+        width: 60px;
+        height: 100%;
+        background-color: #252525;
+        padding-top: 20px;
+      }
+
+      .menu-search-icon {
+        font-size: 20pt !important;
+        padding-top: 25px;
+        color: #fff;
+        width: 61px;
+        height: 55px;
+        text-align: center;
+      }
+
+      .menu-search-icon:hover {
+        cursor: pointer;
+      }
+
+      .foursquare:hover {
+        background-color: #2d5be3;
+      }
+      .wikipedia:hover {
+        background-color: green;
+      }
+      .yelp:hover {
+        background-color: #853330;
+      }
+      .twitter:hover {
+        background-color: #3b94d9;
+      }
+      .nytimes:hover, .nytimes .active {
+        background-color: purple;
+      }
+
+      .menu-places {
+        width: 390px;
+        padding-left: 60px;
+        height: 100%;
+      }
+
+      .menu-places-header {
+        padding: 45px 25px 10px 25px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .menu-places-list {
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+      }
+
+      .menu-places-list::-webkit-scrollbar {
+        width: 10px;
+        overflow: visible;
+      }
+
+      .menu-places-list::-webkit-scrollbar-thumb {
+        background-color: #eef;
+        min-height: 28px;
+        box-shadow: inset 1px 1px 0 rgba(0,0,0,0.1), inset 0 -1px 0 rgba(0,0,0,0.07);
+      }
+
+      .menu-places-item {
+        background-color: #eef;
+        list-style-type: none;
+        margin: 0px 10px 10px;
+        padding: 10px;
+      }
+
+      .menu-places-item:hover {
+        background-color: lightyellow;
+        cursor: pointer;
+      }
+
+      .menu-places-item-optional {
+        font-weight: bold;
+      }
+
+      #map {
+        height: 100%;
+        margin: 0;
+      }
+
+    </style>
+
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></link>
+
+  </head>
+  <body>
+    <!-- SEARCH BAR -->
+    <div id="search-bar">
+      <div id="hamburger-top-menu"><i class="fa fa-bars"></i></div>
+      <div id="site-logo">GL Neighborhood</div>
+      <input id="search-input" class="controls" type="text" data-type="textInput: neighbohood">
+    </div>
+
+    <!-- CONTAINER -->
+    <div id="container">
+
+      <!-- LEFT MENU -->
+      <div id="menu">
+        <div class="menu-search-list ">
+          <div class="menu-search-icon foursquare"><a class="fa fa-foursquare fa-fw"></a></div>
+          <div class="menu-search-icon wikipedia"><a class="fa fa-wikipedia-w fa-fw"></a></div>
+          <div class="menu-search-icon yelp"><a class="fa fa-yelp fa-fw"></a></div>
+          <div class="menu-search-icon twitter"><a class="fa fa-twitter-square fa-fw"></a></div>
+          <div class="menu-search-icon nytimes"><a>NY</a></div>
+        </div>
+
+        <div class="menu-places">
+          <div class="menu-places-header" data-bind="text: placeHeader"></div>
+          <ul class="menu-places-list" data-bind="foreach: placeList">
+            <li class="menu-places-item" data-bind="click: clickMarker">
+                <a href="" target="_blank" data-bind="text: name, attr: { href: web_url }"></a>
+                <p class="menu-places-item-snippet" data-bind="text: snippet"></p>
+                <p class="menu-places-item-optional" data-bind="text: optional"></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+
+      <!-- GOOGLE MAPS -->
+      <div id="map"></div>
+
+    </div>
+
+    <!-- LOADING SCRIPTS -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/knockout/dist/knockout.js"></script>
+
+    <!-- (async) NY Times API -->
+    <script src="js/nytimes.js" async></script>
+
+    <!-- (async) Four Square API -->
+    <script src="js/foursquare.js" async></script>
+
+    <!-- (async) Wikipedia API -->
+    <script src="js/wikipedia.js" async></script>
+
+    <!-- Main App -->
+    <script src="js/app.js" async></script>
+
+    <!-- Google Maps API -->
+    <script src="js/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQBLp5S8HI9zs7YVL5yQFez3NaKsyjeVk&libraries=places&callback=initMap" async defer></script>
+  </body>
+</html>

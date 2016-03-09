@@ -14,10 +14,13 @@ var PlaceItem = function(data) {
 	this.snippet = ko.observable(data.snippet),
 	this.name = ko.observable(data.name),
 	this.optional = ko.observable(data.optional);
+	this.image = ko.observable(data.image);
 };
 
 var PlaceViewModel = function(data) {
 	self.neighborhood = ko.observable();
+	self.locationLat = ko.observable();
+	self.locationLng = ko.observable();
 	self.placeHeader = ko.observable();
 	self.placeList = ko.observableArray();
 
@@ -41,7 +44,7 @@ var setMaxHeight = function() {
 	var $menuPlaceList = $(".menu-places-list");
 
 	$menuPlaceList.css({
-		'max-height': winHeight + "px"
+		'max-height': winHeight - 120 + "px"
 	});
 };
 
@@ -73,7 +76,7 @@ $(function() {
 
 	    window.addEventListener('resize', function() {
 	    	map.fitBounds(mapBounds);
-	    	$('#map').height($(window).height());
+	    	$('#map').height( $(window).height() );
 	    });
 	});
 

@@ -20,6 +20,8 @@ function initMap() {
 	// Fetch the input data
 	var input = document.getElementById('search-input');
   self.neighborhood("Mountain View");
+  self.locationLat(37.3860517);
+  self.locationLng(-122.0838511);
 
 	// Loading the map
 	map = new google.maps.Map(mapElem, options);
@@ -51,6 +53,9 @@ function initMap() {
 
     // Assign neighborhood name
     self.neighborhood(place.name);
+    self.locationLat(place.geometry.location.lat());
+    self.locationLng(place.geometry.location.lng());
+
 
     if (place.geometry.viewport) {
 
@@ -68,6 +73,9 @@ function initMap() {
 
     // Load Four Square
     fourSquare();
+
+    // Update background color
+    updateBackgroundColor($(".foursquare"), "#2d5be3");
 
   });
 };

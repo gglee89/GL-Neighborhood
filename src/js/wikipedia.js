@@ -13,7 +13,7 @@ var wikipedia = function() {
 			"snippet"	: "Failed to get resources from Wikipedia",
 			"name"		: ""
 		}));
-    }, 8000);
+    });
 
     // Set the header of the list
 	self.placeHeader("Found pages in Wikipedia for " + self.neighborhood());

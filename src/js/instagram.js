@@ -25,8 +25,8 @@ var instagram = function() {
 				response.data.forEach(function(item) {
 					self.placeList.push(new PlaceItem({
 						"web_url"	: item.link,
-						"snippet"	: item.caption.hasOwnProperty('text') ? item.caption.text : "<no user",
-						"name"		: item.caption.from.username,
+						"snippet"	: item.caption !== null ? item.caption.text : "<no content>",
+						"name"		: item.caption !== null  ? item.caption.from.username : "<no username>",
 						"image"		: item.images.low_resolution.url
 					}));
 				});

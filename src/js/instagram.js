@@ -11,10 +11,19 @@ var instagram = function() {
 				"&access_token=" + instagramAccessToken;
 
 	// Set the header of the list
-	self.placeHeader("Instagram pictures for " + self.neighborhood());
+	self.placeHeader("Instagram new uploaded pictures for " + self.neighborhood());
 
 	// Removing previous records in the list
-	self.placeList([]);
+	self.recommendedPlaces([]);
+
+	// Hides the filter box
+	self.isFilterVisible(false);
+
+	// Hides the image
+	self.hasImage(true);
+
+	// Hides the venue address
+	self.hasAddress(false);
 
 	$.ajax({
 		url: instagramUrl,
@@ -23,7 +32,7 @@ var instagram = function() {
 
 			if (response.data.length > 0) {
 				response.data.forEach(function(item) {
-					self.placeList.push(new PlaceItem({
+					self.recommendedPlaces.push(new PlaceItem({
 						"web_url"	: item.link,
 						"snippet"	: item.caption !== null ? item.caption.text : "<no content>",
 						"name"		: item.caption !== null  ? item.caption.from.username : "<no username>",
@@ -31,7 +40,7 @@ var instagram = function() {
 					}));
 				});
 			} else {
-				self.placeList.push(new PlaceItem({
+				self.recommendedPlaces.push(new PlaceItem({
 					"web_url"	: "",
 					"snippet"	: "No related posts found",
 					"name"		: "",
@@ -51,4 +60,19 @@ $('.instagram').on('click', function() {
 	// Load Instagram API
 	instagram();
 
+	var winHeight = $(window).height();
+
+	if (winHeight < 875) {
+		// Resize search bar height
+		$('#search-bar').animate({
+			height: "100px"
+		}, "linear", function() {
+			// Re-set place menu list max-height
+			setMaxHeight();
+		});
+
+		$('#container').animate({
+			paddingTop: "101px"
+		}, "linear");
+	}
 });

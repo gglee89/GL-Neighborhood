@@ -57,6 +57,13 @@ gulp.task('scripts-nytimes-api', function() {
 		.pipe(gulp.dest('../dist/js'));
 });
 
+gulp.task('scripts-history', function() {
+	gulp.src(['js/history.js'])
+		.pipe(uglify())
+		.pipe(rename('history.min.js'))
+		.pipe(gulp.dest('../dist/js'));
+});
+
 
 //Files
 gulp.task('files', function() {
@@ -64,8 +71,19 @@ gulp.task('files', function() {
 		.pipe(gulp.dest('../dist/'))
 });
 
+//Images
+gulp.task('images', function() {
+	gulp.src(['image/**/*'])
+		.pipe(minifyImage({
+			progressive: true,
+			svgoPlugins: [{removeViewbox: false}]
+		}))
+		.pipe(gulp.dest('../dist/image'))
+});
+
 // Watch
 gulp.task('watch', function() {
+	gulp.watch('image/**/*', ['images']);
 	gulp.watch('index.html', ['files']);
 	gulp.watch('js/app.js', ['scripts']);
 	gulp.watch('js/map.js', ['scripts-map']);
@@ -85,6 +103,8 @@ gulp.task('default',
 	 'scripts-foursquare-api',
 	 'scripts-instagram-api',
 	 'scripts-nytimes-api',
+	 'scripts-history',
 	 'files',
+	 'images',
 	 'watch']
 );

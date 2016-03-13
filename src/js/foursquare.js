@@ -16,19 +16,39 @@ var fourSquare = function() {
 	self.placeHeader("Foursquare recommended places in " + self.neighborhood());
 
 	// Removing previous records in the list
-	self.placeList([]);
+	self.recommendedPlaces([]);
 
 	// API Request
 	$.getJSON(fourSquareUrl, function(data) {
 
+		// Display the filter box
+		self.isFilterVisible(true);
+
+		// Hides the image
+		self.hasImage(false);
+
+		// Shows the venue address
+		self.hasAddress(true);
+
 		var venueItems = data.response.groups[0].items;
+
 		if ( venueItems.length > 0 ) {
 			venueItems.forEach(function(item) {
-				self.placeList.push(new PlaceItem({
-					"web_url"	: item.tips[0].canonicalUrl,
-					"snippet"	: '"' + item.tips[0].text + '"',
-					"name"		: item.venue.name,
-					"optional"	: 'Rating: ' + item.venue.rating
+
+				var venueName = item.venue.name;
+				var canonicalUrl = item.tips[0].canonicalUrl;
+				var textSnippet = item.tips[0].text;
+				var category = item.venue.categories[0].name;
+				var rating = item.venue.rating;
+				var formattedAddress = item.venue.location.formattedAddress;
+
+				self.recommendedPlaces.push(new PlaceItem({
+					"web_url"	: canonicalUrl,
+					"snippet"	: '"' + textSnippet + '"',
+					"category"	: category,
+					"address"	: formattedAddress,
+					"name"		: venueName,
+					"optional"	: 'Rating: ' + rating
 				}));
 
 				var location = {
@@ -37,16 +57,16 @@ var fourSquare = function() {
 				}
 
 				var contentString = '<div id="content">' +
-					'<p><b>' + item.venue.name + '</b><br>' +
-						item.venue.categories[0].name + '</p>' +
+					'<p><b>' + venueName + '</b><br>' +
+						category + '</p>' +
 					'<div id="bodyContent">' +
-					'	<p><b>Review:</b> ' + item.tips[0].text + '</p>' +
-					'	<p><b>Location:</b> ' + item.venue.location.formattedAddress + '</p>' +
-					'	<p><b>URL: <b/><a href="' + item.tips[0].canonicalUrl + '">' + item.tips[0].canonicalUrl + '</a></p>' +
-					'	<p><b>Rating:</b> ' + item.venue.rating + '</p>' +
+					'	<p><b>Review:</b> ' + textSnippet + '</p>' +
+					'	<p><b>Location:</b> ' + formattedAddress + '</p>' +
+					'	<p><b>URL: <b/><a href="' + canonicalUrl + '">' + canonicalUrl + '</a></p>' +
+					'	<p><b>Rating:</b> ' + rating + '</p>' +
 					'</div>';
 
-				createMarker(location, item.venue.name, contentString);
+				createMarker(location, venueName, contentString);
 
 				// Set map zoom level using the suggested map bound from the four square API
 				var fourSquareMapBound = data.response.suggestedBounds;
@@ -58,7 +78,7 @@ var fourSquare = function() {
 				};
 			});
 		} else {
-			self.placeList.push(new PlaceItem({
+			self.recommendedPlaces.push(new PlaceItem({
 				"web_url"	: "",
 				"snippet"	: "No place found",
 				"name"		: ""
@@ -66,7 +86,7 @@ var fourSquare = function() {
 		}
 
 	}).error(function(e) {
-		self.placeList.push(new PlaceItem({
+		self.recommendedPlaces.push(new PlaceItem({
 			"web_url"	: "",
 			"snippet"	: "Error in the Foursquare API",
 			"name"		: ""
@@ -82,4 +102,19 @@ $(".foursquare").on('click', function() {
 	// Load Four Square API
 	fourSquare();
 
+	var winHeight = $(window).height();
+
+	if (winHeight < 875) {
+		// Resize search bar height
+		$('#search-bar').animate({
+			height: "160px"
+		}, "linear", function() {
+			// Re-set place menu list max-height
+			setMaxHeight();
+		});
+
+		$('#container').animate({
+			paddingTop: "161px"
+		}, "linear");
+	}
 });

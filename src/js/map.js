@@ -4,13 +4,19 @@ var map,				    // Loads the map
     mapBounds,      // Best visual fit
 	  service,			  // Services a defined place
     marker,
-    markers = [];
+    markers = [],
+    foursquareIcon1 = "image/foursquareIcon1.png",
+    foursquareIcon2 = "image/foursquareIcon2.png",
+    starIcon = "image/star.png";
+
 
 var mapElem = document.getElementById('map');
 
 function initMap() {
 
-	var mountainView = new google.maps.LatLng(37.3860517, -122.0838511);
+  var latitude = 37.3860517;
+  var longitude = -122.0838511;
+	var mountainView = new google.maps.LatLng(latitude, longitude);
 
 	var options = {
 		center: mountainView,
@@ -20,8 +26,8 @@ function initMap() {
 	// Fetch the input data
 	var input = document.getElementById('search-input');
   self.neighborhood("Mountain View");
-  self.locationLat(37.3860517);
-  self.locationLng(-122.0838511);
+  self.locationLat(latitude);
+  self.locationLng(longitude);
 
 	// Loading the map
 	map = new google.maps.Map(mapElem, options);
@@ -31,12 +37,6 @@ function initMap() {
 
 	// Set AutoComplete
 	var autocomplete = new google.maps.places.Autocomplete(input);
-
-  // Set the position of the marker using the place ID and location.
-  marker = new google.maps.Marker({
-      map: map,
-      position: mountainView
-  });
 
   // Load inital markers on the map
   loadMarkers();
@@ -56,31 +56,45 @@ function initMap() {
     self.locationLat(place.geometry.location.lat());
     self.locationLng(place.geometry.location.lng());
 
+    /*// Append cookie
+    var old_cookie;
+    var date = new Date();
+    var cookie_value = {
+      "neighborhood": self.neighborhood(),
+      "time": date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+    };
 
-    if (place.geometry.viewport) {
+    console.log(getCookie("neighborhood_search"));
 
-      map.fitBounds(place.geometry.viewport);
-
+    if (!getCookie("neighborhood_search")) {
+      old_cookie = setCookie("neighborhood_search", cookie_value, 1 );
     } else {
+      old_cookie = getCookie("neighborhood_search");
+      console.log(old_cookie);
+    }*/
 
+    // Best fit the map to the viewport
+    if (place.geometry.viewport) {
+      map.fitBounds(place.geometry.viewport);
+    } else {
       map.setCenter(place.geometry.location);
       map.setZoom(17);
-
     }
 
-    // Empty the markers array
-    markers = [];
-
-    // Load Four Square
-    fourSquare();
-
-    // Update background color
-    updateBackgroundColor($(".foursquare"), "#2d5be3");
+    // Load all relevant markers to Foursquare on the map
+    loadMarkers();
 
   });
 };
 
 var loadMarkers = function() {
+  // Set the position of the marker using the place ID and location.
+  marker = new google.maps.Marker({
+      map: map,
+      position: new google.maps.LatLng(self.locationLat(), self.locationLng()),
+      icon: starIcon
+  });
+
   // Empty the markers array
   markers = [];
 
@@ -97,13 +111,24 @@ var createMarker = function(location, name, contentString) {
   // Set the position of the marker using the place ID and location.
   var mapMarker = new google.maps.Marker({
       map: map,
-      position: placeLoc
+      position: placeLoc,
+      icon: foursquareIcon1
   });
-
-  markers.push(new MapMarker(mapMarker, name, placeLoc));
 
   mapMarker.addListener('click', function() {
     infowindow.setContent( contentString );
     infowindow.open(map, mapMarker);
   });
+
+  // var $menuItem = $('.menu-places-item');
+
+  // $menuItem.on('mouseover', function() {
+  //     mapMarker.setIcon(foursquareIcon2);
+  // });
+
+  // $menuItem.on('mouseout', function() {
+  //     mapMarker.setIcon(foursquareIcon1);
+  // });
+
+  markers.push(new MapMarker(mapMarker, name, placeLoc));
 }

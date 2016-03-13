@@ -6,19 +6,19 @@
     <meta charset="utf-8">
 
     <!-- CUSTOM FAVICONS -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/image/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/image/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/image/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/image/favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/image/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/image/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/image/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/image/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/image/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/image/favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/image/favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="image/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="image/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="image/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="image/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="image/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="image/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="image/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="image/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="image/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="image/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="image/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="image/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="image/favicon/favicon-16x16.png">
 
     <link type="text/css" rel="stylesheet" href="css/style.min.css"></link>
     <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></link>
@@ -29,8 +29,14 @@
     <div id="search-bar">
       <div id="hamburger-top-menu"><i class="fa fa-bars"></i></div>
       <div id="site-logo">GL Neighborhood</div>
-      <input id="search-input" class="controls" type="text" data-type="textInput: neighbohood">
-      <div id="current-city">Current place: <span data-bind="text: neighborhood"></span></div>
+      <div>
+        <i class="fa fa-globe"></i>
+        <input id="search-input" class="controls" type="text" data-type="textInput: neighbohood">
+      </div>
+      <div class="menu-places-filter" data-bind="style: { visibility: isFilterVisible() == true ? 'visible' : 'hidden' }">
+        <i class="fa fa-filter"></i>
+        <input id="search-filter" class="controls" type="text" placeholder="Filter your search by title and category" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+      </div>
     </div>
 
     <!-- CONTAINER -->
@@ -44,17 +50,26 @@
           <!-- <div class="menu-search-icon yelp"><a class="fa fa-yelp fa-fw"></a></div> -->
           <div class="menu-search-icon instagram"><a class="fa fa-instagram fa-fw"></a></div>
           <div class="menu-search-icon nytimes"><a>NY</a></div>
+          <div class="menu-search-icon history"><a class="fa fa-history fa-fw"></a></div>
         </div>
 
         <div class="menu-places">
           <div class="menu-places-header" data-bind="text: placeHeader"></div>
           <ul class="menu-places-list" data-bind="foreach: placeList">
-            <li class="menu-places-item" data-bind="click: clickMarker">
-                <a href="" target="_blank" data-bind="text: name, attr: { href: web_url }"></a>
+              <li class="menu-places-item" data-bind="click: clickMarker">
+                <b><span data-bind="text: name"></span></b>
+                <br>
+                <span data-bind="text: category"></span>
                 <p class="menu-places-item-snippet" data-bind="text: snippet"></p>
-                <img src="" class="menu-places-item-image" data-bind="attr: { src : image }">
+                <a class="menu-places-link" href="" target="_blank" data-bind="attr: { href: web_url }">
+                  <img src="" class="menu-places-item-image" data-bind="attr: { src : image }, visible: hasImage">
+                </a>
+                <div class="menu-places-item-address" data-bind="visible: hasAddress">
+                  <span><b>Address: </b></span>
+                  <span data-bind="text: address"></span>
+                </div>
                 <p class="menu-places-item-optional" data-bind="text: optional"></p>
-            </li>
+              </li>
           </ul>
         </div>
       </div>

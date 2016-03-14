@@ -19,9 +19,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="image/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="image/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="image/favicon/favicon-16x16.png">
-
-    <link type="text/css" rel="stylesheet" href="css/style.min.css"></link>
-    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/style.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
   </head>
   <body>
@@ -55,13 +54,13 @@
         <div class="menu-places">
           <div class="menu-places-header" data-bind="text: placeHeader"></div>
           <ul class="menu-places-list" data-bind="foreach: placeList">
-              <li class="menu-places-item" data-bind="click: clickMarker">
+              <li class="menu-places-item" data-bind="click: clickMarker, event: { mouseover: hoverMarker }">
                 <b><span data-bind="text: name"></span></b>
                 <br>
                 <span data-bind="text: category"></span>
                 <p class="menu-places-item-snippet" data-bind="text: snippet"></p>
                 <a class="menu-places-link" href="" target="_blank" data-bind="attr: { href: web_url }">
-                  <img src="" class="menu-places-item-image" data-bind="attr: { src : image }, visible: hasImage">
+                  <img src="" alt="asdf" class="menu-places-item-image" data-bind="attr: { src : image, alt : name }, visible: hasImage">
                 </a>
                 <div class="menu-places-item-address" data-bind="visible: hasAddress">
                   <span><b>Address: </b></span>

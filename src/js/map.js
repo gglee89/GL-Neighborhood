@@ -85,7 +85,7 @@ function initMap() {
     loadMarkers();
 
   });
-};
+}
 
 var loadMarkers = function() {
   // Set the position of the marker using the place ID and location.
@@ -105,7 +105,7 @@ var loadMarkers = function() {
   updateBackgroundColor($(".foursquare"), "#2d5be3");
 };
 
-var createMarker = function(location, name, contentString) {
+var createMarker = function(location, name, category, contentString) {
   var placeLoc = new google.maps.LatLng(location.lat, location.lng);
 
   // Set the position of the marker using the place ID and location.
@@ -115,20 +115,19 @@ var createMarker = function(location, name, contentString) {
       icon: foursquareIcon1
   });
 
-  mapMarker.addListener('click', function() {
+  google.maps.event.addListener(mapMarker, 'click', function() {
     infowindow.setContent( contentString );
     infowindow.open(map, mapMarker);
   });
 
-  // var $menuItem = $('.menu-places-item');
+  // Switch icon on marker mouseover and mouseout
+  google.maps.event.addListener(mapMarker, "mouseover", function() {
+    mapMarker.setIcon(foursquareIcon2);
+  });
 
-  // $menuItem.on('mouseover', function() {
-  //     mapMarker.setIcon(foursquareIcon2);
-  // });
+  google.maps.event.addListener(mapMarker, "mouseout", function() {
+    mapMarker.setIcon(foursquareIcon1);
+  });
 
-  // $menuItem.on('mouseout', function() {
-  //     mapMarker.setIcon(foursquareIcon1);
-  // });
-
-  markers.push(new MapMarker(mapMarker, name, placeLoc));
-}
+  markers.push(new MapMarker(mapMarker, name, category, placeLoc));
+};

@@ -4,7 +4,13 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     minifyCSS = require('gulp-minify-css'),
     minifyImage = require('gulp-imagemin'),
-    watch = require('gulp-watch');;
+    pngquant = require('imagemin-pngquant'),
+    jpegtran = require('imagemin-jpegtran'),
+    gifsicle = require('imagemin-gifsicle'),
+    html5Lint = require('gulp-html5-lint'),
+    jshint = require('gulp-jshint'),
+    csslint = require('gulp-csslint'),
+    watch = require('gulp-watch');
 
 // CSS Styles
 gulp.task('style', function() {
@@ -71,26 +77,46 @@ gulp.task('files', function() {
 		.pipe(gulp.dest('../dist/'))
 });
 
+gulp.task('html5-lint', function() {
+    gulp.src('*.html')
+        .pipe(html5Lint());
+});
+
+gulp.task('js-hint', function() {
+    gulp.src('js/*.js')
+        .pipe(jshint())
+    	.pipe(jshint.reporter());
+});
+
+gulp.task('css-lint', function() {
+    gulp.src('css/*.css')
+        .pipe(csslint({
+        	ids: false
+        }))
+    	.pipe(csslint.reporter());
+});
+
 //Images
 gulp.task('images', function() {
-	gulp.src(['image/**/*'])
+	gulp.src(['image/*'])
 		.pipe(minifyImage({
 			progressive: true,
-			svgoPlugins: [{removeViewbox: false}]
+			svgoPlugins: [{removeViewbox: false}],
+			use: [pngquant(), jpegtran(), gifsicle()]
 		}))
 		.pipe(gulp.dest('../dist/image'))
 });
 
 // Watch
 gulp.task('watch', function() {
-	gulp.watch('image/**/*', ['images']);
+	gulp.watch('image/*', ['images']);
 	gulp.watch('index.html', ['files']);
 	gulp.watch('js/app.js', ['scripts']);
 	gulp.watch('js/map.js', ['scripts-map']);
 	gulp.watch('js/foursquare.js', ['scripts-foursquare-api']);
 	gulp.watch('js/instagram.js', ['scripts-instagram-api']);
 	gulp.watch('js/nytimes.js', ['scripts-nytimes-api']);
-	gulp.watch('css/style.css', ['style']);
+	gulp.watch('css/style.css', ['style', 'css-lint']);
 });
 
 
@@ -105,6 +131,8 @@ gulp.task('default',
 	 'scripts-nytimes-api',
 	 'scripts-history',
 	 'files',
+	 'js-hint',
+	 'css-lint',
 	 'images',
 	 'watch']
 );

@@ -10,7 +10,7 @@ var fourSquare = function() {
 			"?client_id=" + fourSquareClientId +
 			"&client_secret=" + fourSquareSecretKey +
 			"&near=" + encodeURIComponent( self.neighborhood() ) +
-			"&v=20160306&m=foursquare"
+			"&v=20160306&m=foursquare";
 
 	// Set the header of the list
 	self.placeHeader("Foursquare recommended places in " + self.neighborhood());
@@ -54,7 +54,7 @@ var fourSquare = function() {
 				var location = {
 					"lat": item.venue.location.lat,
 					"lng": item.venue.location.lng
-				}
+				};
 
 				var contentString = '<div id="content">' +
 					'<p><b>' + venueName + '</b><br>' +
@@ -66,16 +66,16 @@ var fourSquare = function() {
 					'	<p><b>Rating:</b> ' + rating + '</p>' +
 					'</div>';
 
-				createMarker(location, venueName, contentString);
+				createMarker(location, venueName, category, contentString);
 
 				// Set map zoom level using the suggested map bound from the four square API
 				var fourSquareMapBound = data.response.suggestedBounds;
-				if (map != undefined) {
+				if (map !== undefined) {
 					mapBounds = new google.maps.LatLngBounds(
 						new google.maps.LatLng(fourSquareMapBound.sw.lat, fourSquareMapBound.sw.lng),
 						new google.maps.LatLng(fourSquareMapBound.ne.lat, fourSquareMapBound.ne.lng));
 					map.fitBounds(mapBounds);
-				};
+				}
 			});
 		} else {
 			self.recommendedPlaces.push(new PlaceItem({

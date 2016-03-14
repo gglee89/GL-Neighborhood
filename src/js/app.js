@@ -3,9 +3,10 @@
 var self = this;
 
 // Load main app
-var MapMarker = function(marker, name, position) {
+var MapMarker = function(marker, name, category, position) {
 	this.marker = marker;
 	this.name = name;
+	this.category = category;
 	this.position = position;
 };
 
@@ -40,6 +41,17 @@ var PlaceViewModel = function(data) {
 	self.recommendedPlaces = ko.observableArray([]);
 	self.placeList = ko.observableArray( self.recommendedPlaces() );
 
+	self.hoverMarker = function(venue) {
+		markers.forEach(function(pin) {
+			if (pin.name === venue.name()) {
+				pin.marker.setIcon( foursquareIcon2 );
+			} else {
+				// Set marker icon to default
+				pin.marker.setIcon( foursquareIcon1 );
+			}
+		});
+	};
+
 	self.clickMarker = function(venue) {
 		var winHeight = $(window).height();
 		if (winHeight < 875) {
@@ -49,10 +61,14 @@ var PlaceViewModel = function(data) {
 		}
 
 		markers.forEach(function(pin) {
+			// Set marker icon to default
+			pin.marker.setIcon( foursquareIcon1 );
+
 			if (pin.name === venue.name()) {
+				pin.marker.setIcon( foursquareIcon2 );
 				google.maps.event.trigger( pin.marker, 'click' );
 				map.panTo( pin.position );
-			};
+			}
 		});
 	};
 
@@ -64,15 +80,28 @@ var PlaceViewModel = function(data) {
 
 		self.recommendedPlaces().forEach(function(place_item) {
 			place = place_item;
-			if ( place.name().toLowerCase().indexOf(filter) != -1 ||
-				 place.category().toLowerCase().indexOf(filter) != -1 ) {
+			if ( place.name().toLowerCase().indexOf(filter) != -1 ) {
 				list.push( place_item );
-			};
+			}
 		});
 
 		self.placeList( list );
 	});
-}
+
+	self.displayedMarkers = ko.computed(function() {
+		var keyword = self.filter().toLowerCase();
+		markers.forEach(function(item) {
+			if (item.marker.map === null) {
+				item.marker.setMap(map);
+			}
+
+			if (item.name.toLowerCase().indexOf(keyword) === -1 &&
+				item.category.toLowerCase().indexOf(keyword) === -1) {
+				item.marker.setMap(null);
+			}
+		});
+	});
+};
 
 ko.applyBindings(new PlaceViewModel());
 
@@ -107,7 +136,7 @@ var updateBackgroundColor = function(elem, color) {
 
 	// Menu Places
 	$(".menu-places").css(fourSquareBackgroundColor);
-}
+};
 
 // General string filter
 var stringStartsWith = function (string, startsWith) {

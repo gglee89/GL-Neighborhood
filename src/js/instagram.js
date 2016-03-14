@@ -46,7 +46,7 @@ var instagram = function() {
 					"name"		: "",
 					"image"		: ""
 				}));
-			};
+			}
 		}
 	});
 

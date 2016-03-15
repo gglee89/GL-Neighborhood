@@ -56,6 +56,9 @@ function initMap() {
     self.locationLat(place.geometry.location.lat());
     self.locationLng(place.geometry.location.lng());
 
+    // Reset filter
+    self.filter("");
+
     /*// Append cookie
     var old_cookie;
     var date = new Date();
@@ -118,6 +121,13 @@ var createMarker = function(location, name, category, contentString) {
   google.maps.event.addListener(mapMarker, 'click', function() {
     infowindow.setContent( contentString );
     infowindow.open(map, mapMarker);
+
+    // Toggle bounce animation in the marker
+    if (mapMarker.getAnimation() !== null) {
+      mapMarker.setAnimation(google.maps.Animation.BOUNCE);
+    } else {
+      mapMarker.setAnimation(null);
+    }
   });
 
   // Switch icon on marker mouseover and mouseout
@@ -129,5 +139,5 @@ var createMarker = function(location, name, category, contentString) {
     mapMarker.setIcon(foursquareIcon1);
   });
 
-  markers.push(new MapMarker(mapMarker, name, category, placeLoc));
+  markers.push(new MapMarker(mapMarker, name, category, placeLoc, false));
 };

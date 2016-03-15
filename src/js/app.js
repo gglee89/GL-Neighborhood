@@ -3,11 +3,12 @@
 var self = this;
 
 // Load main app
-var MapMarker = function(marker, name, category, position) {
+var MapMarker = function(marker, name, category, position, isActive) {
 	this.marker = marker;
 	this.name = name;
 	this.category = category;
 	this.position = position;
+	this.isActive = isActive;
 };
 
 var PlaceItem = function(data) {
@@ -41,13 +42,18 @@ var PlaceViewModel = function(data) {
 	self.recommendedPlaces = ko.observableArray([]);
 	self.placeList = ko.observableArray( self.recommendedPlaces() );
 
-	self.hoverMarker = function(venue) {
+	self.mouseoutItemMarker = function(venue) {
+		markers.forEach(function(pin) {
+			if ( !pin.marker.isActive ) {
+				pin.marker.setIcon( foursquareIcon1 );
+			}
+		});
+	};
+
+	self.mouseoverItemMarker = function(venue) {
 		markers.forEach(function(pin) {
 			if (pin.name === venue.name()) {
 				pin.marker.setIcon( foursquareIcon2 );
-			} else {
-				// Set marker icon to default
-				pin.marker.setIcon( foursquareIcon1 );
 			}
 		});
 	};
@@ -61,11 +67,18 @@ var PlaceViewModel = function(data) {
 		}
 
 		markers.forEach(function(pin) {
+			// Reset all animations
+	        pin.marker.setAnimation(null);
+
 			// Set marker icon to default
 			pin.marker.setIcon( foursquareIcon1 );
+			pin.marker.isActive = false;
 
 			if (pin.name === venue.name()) {
+				// Set marker and item to active
 				pin.marker.setIcon( foursquareIcon2 );
+				pin.marker.isActive = true;
+
 				google.maps.event.trigger( pin.marker, 'click' );
 				map.panTo( pin.position );
 			}
@@ -80,7 +93,8 @@ var PlaceViewModel = function(data) {
 
 		self.recommendedPlaces().forEach(function(place_item) {
 			place = place_item;
-			if ( place.name().toLowerCase().indexOf(filter) != -1 ) {
+			if ( place.name().toLowerCase().indexOf(filter) !== -1 ||
+				 place.category().toLowerCase().indexOf(filter) !== -1 ) {
 				list.push( place_item );
 			}
 		});

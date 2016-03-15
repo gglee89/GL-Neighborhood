@@ -19,6 +19,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="image/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="image/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="image/favicon/favicon-16x16.png">
+    <link rel="manifest" href="image/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="image/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" type="text/css" href="css/style.min.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
@@ -54,7 +58,7 @@
         <div class="menu-places">
           <div class="menu-places-header" data-bind="text: placeHeader"></div>
           <ul class="menu-places-list" data-bind="foreach: placeList">
-              <li class="menu-places-item" data-bind="click: clickMarker, event: { mouseover: hoverMarker }">
+              <li class="menu-places-item" data-bind="click: clickMarker, event: { mouseover: mouseoverItemMarker, mouseout: mouseoutItemMarker }">
                 <b><span data-bind="text: name"></span></b>
                 <br>
                 <span data-bind="text: category"></span>

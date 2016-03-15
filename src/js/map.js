@@ -122,12 +122,21 @@ var createMarker = function(location, name, category, contentString) {
     infowindow.setContent( contentString );
     infowindow.open(map, mapMarker);
 
+    // Set all marker icon to default
+    markers.forEach(function(pin) {
+      pin.marker.setIcon( foursquareIcon1 );
+      pin.marker.isActive = false;
+
+      // Reset bounce animation
+      pin.marker.setAnimation(null);
+    });
+
+    // Set chosen marker to active with second icon
+    mapMarker.setIcon( foursquareIcon2 );
+    mapMarker.isActive = true;
+
     // Toggle bounce animation in the marker
-    if (mapMarker.getAnimation() !== null) {
-      mapMarker.setAnimation(google.maps.Animation.BOUNCE);
-    } else {
-      mapMarker.setAnimation(null);
-    }
+    mapMarker.setAnimation(google.maps.Animation.BOUNCE);
   });
 
   // Switch icon on marker mouseover and mouseout
@@ -136,7 +145,9 @@ var createMarker = function(location, name, category, contentString) {
   });
 
   google.maps.event.addListener(mapMarker, "mouseout", function() {
-    mapMarker.setIcon(foursquareIcon1);
+    if ( !mapMarker.isActive ) {
+      mapMarker.setIcon(foursquareIcon1);
+    };
   });
 
   markers.push(new MapMarker(mapMarker, name, category, placeLoc, false));

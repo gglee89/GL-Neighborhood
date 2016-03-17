@@ -1,1 +1,2 @@
-node_modules/\nbower_components/
+src/node_modules
+src/bower_components

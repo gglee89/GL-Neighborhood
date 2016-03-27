@@ -1,5 +1,5 @@
 
-# My-Neighborhood
+# GL-Neighborhood
 
 Project P5-1. Website developed as part of the Udacity's FEND course work.
 
@@ -9,7 +9,7 @@ Project P5-1. Website developed as part of the Udacity's FEND course work.
 Here's the link to the project
 
 GITHUB IO
-[http://gglee89.github.io/My-Neighborhood](http://gglee89.github.io/My-Neighborhood/dist)
+[http://gglee89.github.io/GL-Neighborhood](http://gglee89.github.io/GL-Neighborhood/dist)
 
 GOOGLE APP ENGINE
 [https://gl-neighborhood.appspot.com](https://gl-neighborhood.appspot.com)
